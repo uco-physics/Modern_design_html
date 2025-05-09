@@ -4,31 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>スーパーリッチなモダンサイト</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Poppins:wght@300;500;700&family=Manrope:wght@300;500;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #6366f1;
-      --secondary: #f3f4f6;
-      --accent: #00ffaa;
-      --text: #1f2937;
-      --bg: #ffffff;
-      --glass-bg: rgba(255, 255, 255, 0.1);
+      --primary: #4f46e5; /* インディゴ */
+      --accent: #00ffaa; /* ネオンライム */
+      --secondary: #f3f4f6; /* ライトグレー */
+      --text: #111827; /* ダークグレー */
+      --bg: #ffffff; /* ホワイト */
+      --glass-bg: rgba(255, 255, 255, 0.15);
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       --neon-shadow: 0 0 20px var(--accent);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, #a5b4fc 100%);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1f2937;
+        --bg: #111827;
         --text: #f3f4f6;
         --glass-bg: rgba(0, 0, 0, 0.2);
+        --secondary: #1f2937;
       }
     }
 
     @layer base {
       body {
         @apply font-sans bg-[var(--bg)] text-[var(--text)] m-0 p-0 overflow-x-hidden;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', 'Poppins', 'Manrope', sans-serif;
       }
 
       * {
@@ -55,14 +59,25 @@
     .cursor.hovered {
       transform: scale(1.5);
       border-color: var(--primary);
+      background: rgba(0, 255, 170, 0.2);
     }
 
     /* ガラス質感 */
     .glass {
       background: var(--glass-bg);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: var(--shadow);
+    }
+
+    /* スティッキーヘッダー */
+    .header {
+      @apply fixed top-0 left-0 w-full z-50 glass;
+      transition: transform 0.3s ease;
+    }
+
+    .header.scrolled {
+      transform: translateY(-100%);
     }
 
     /* ヒーローセクション */
@@ -71,10 +86,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--primary) 0%, #a5b4fc 100%);
-      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      background: var(--gradient);
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
       position: relative;
       overflow: hidden;
+      scroll-snap-align: start;
     }
 
     .hero::before {
@@ -84,8 +100,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-      animation: gradientShift 10s infinite;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+      animation: gradientShift 15s infinite;
     }
 
     @keyframes gradientShift {
@@ -94,25 +110,59 @@
       100% { transform: translateX(0); }
     }
 
+    /* インタラクティブな背景 */
+    .hero-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 170, 0.2) 0%, transparent 70%);
+      transition: background 0.5s ease;
+    }
+
+    /* タイポグラフィアニメーション */
+    .hero-title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: letterFadeIn 0.5s ease forwards;
+    }
+
+    @keyframes letterFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title span:nth-child(1) { animation-delay: 0.1s; }
+    .hero-title span:nth-child(2) { animation-delay: 0.2s; }
+    .hero-title span:nth-child(3) { animation-delay: 0.3s; }
+    /* 以下略、文字数に応じて追加 */
+
     /* 地球儀アニメーション */
     .globe {
       position: absolute;
       bottom: 10%;
       right: 10%;
-      width: 200px;
-      height: 200px;
+      width: 250px;
+      height: 250px;
       transform: perspective(1000px) rotateY(0deg);
-      animation: rotateGlobe 20s linear infinite;
+      animation: rotateGlobe 30s linear infinite;
+      filter: drop-shadow(0 0 20px var(--accent));
     }
 
     .globe:hover {
       animation-play-state: paused;
-      transform: scale(1.2);
+      transform: perspective(1000px) rotateY(10deg) scale(1.2);
     }
 
     @keyframes rotateGlobe {
       0% { transform: perspective(1000px) rotateY(0deg); }
       100% { transform: perspective(1000px) rotateY(360deg); }
+    }
+
+    .globe svg {
+      width: 100%;
+      height: 100%;
     }
 
     /* ハンバーガーメニュー */
@@ -145,7 +195,11 @@
 
     .nav-menu a {
       @apply text-xl font-semibold text-[var(--text)] hover:text-[var(--accent)];
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      transform: translateX(10px);
     }
 
     .hamburger {
@@ -154,7 +208,7 @@
 
     /* カード */
     .card {
-      @apply glass p-6 rounded-xl;
+      @apply glass p-8 rounded-2xl relative overflow-hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       transform: perspective(1000px) rotateX(0deg);
     }
@@ -162,6 +216,22 @@
     .card:hover {
       transform: perspective(1000px) rotateX(5deg) translateY(-10px);
       box-shadow: var(--neon-shadow);
+    }
+
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--glass-bg);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      @apply p-8;
+    }
+
+    .card:hover .card-overlay {
+      transform: translateY(0);
     }
 
     /* CTAボタン */
@@ -192,6 +262,7 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
+      @apply py-4;
     }
 
     .carousel::-webkit-scrollbar {
@@ -221,10 +292,27 @@
 
     .modal:target {
       display: flex;
+      animation: modalFadeIn 0.5s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .modal-content {
-      @apply glass p-8 rounded-xl max-w-md;
+      @apply glass p-8 rounded-2xl max-w-md;
+    }
+
+    /* インタラクティブなフォーム */
+    .form-input {
+      @apply w-full p-3 rounded-lg bg-[var(--secondary)] border border-transparent;
+      transition: border 0.3s ease, transform 0.3s ease;
+    }
+
+    .form-input:focus {
+      @apply border-[var(--accent)] transform scale-1.02;
+      outline: none;
     }
 
     /* パララックス */
@@ -234,28 +322,60 @@
       background-position: center;
     }
 
+    /* プログレスバー */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: var(--accent);
+      z-index: 1000;
+      transition: width 0.1s ease;
+    }
+
+    /* カスタムスクロールバー */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
     /* アニメーション */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .animate-fadeIn {
-      animation: fadeIn 1s ease-out;
-    }
   </style>
 </head>
 <body>
+  <!-- プログレスバー -->
+  <div class="progress-bar"></div>
+
   <!-- カスタムカーソル -->
   <div class="cursor"></div>
 
+  <!-- スティッキーヘッダー -->
+  <header class="header">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-[var(--accent)]">SuperRich</h1>
+      <label for="nav-toggle" class="hamburger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </label>
+    </div>
+  </header>
+
   <!-- ハンバーガーメニュー -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
-  <label for="nav-toggle" class="hamburger">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-    </svg>
-  </label>
   <nav class="nav-menu">
     <ul>
       <li><a href="#home">ホーム</a></li>
@@ -267,46 +387,60 @@
 
   <!-- ヒーローセクション -->
   <section id="home" class="hero">
-    <div class="text-center animate-fadeIn">
-      <h1 class="text-5xl md:text-8xl font-extrabold mb-6">未来を切り開く</h1>
-      <p class="text-xl md:text-3xl mb-8">スーパーリッチな静的サイト体験</p>
+    <div class="hero-background"></div>
+    <div class="text-center" data-aos="fade-up" data-aos-duration="1000">
+      <h1 class="hero-title text-5xl md:text-8xl font-extrabold mb-6">
+        <span>未</span><span>来</span><span>を</span><span>切</span><span>り</span><span>開</span><span>く</span>
+      </h1>
+      <p class="text-xl md:text-3xl mb-8 font-light">スーパーリッチな静的サイト体験</p>
       <a href="#contact" class="cta-button">今すぐ始める</a>
     </div>
     <!-- 地球儀アニメーション -->
     <div class="globe">
-      <svg viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="2">
-        <circle cx="50" cy="50" r="45"/>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="1">
+        <circle cx="50" cy="50" r="45" fill="rgba(0, 255, 170, 0.1)"/>
         <path d="M50 5a45 45 0 0 1 0 90" stroke-dasharray="10 10"/>
         <path d="M5 50h90" stroke-dasharray="10 10"/>
+        <path d="M20 20c10 20 30 20 40 0" stroke="var(--primary)"/>
+        <path d="M30 70c10-20 30-20 40 0" stroke="var(--primary)"/>
       </svg>
     </div>
   </section>
 
   <!-- 特徴セクション -->
-  <section id="features" class="py-20">
+  <section id="features" class="py-20" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold text-center mb-12 animate-fadeIn">私たちの強み</h2>
+      <h2 class="text-5xl font-bold text-center mb-12">私たちの強み</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="card">
           <h3 class="text-2xl font-semibold mb-4">高速パフォーマンス</h3>
           <p>最適化されたコードで瞬時にロード。</p>
+          <div class="card-overlay">
+            <p>詳細: ミニファイされたCSSと遅延ロードで最高速度。</p>
+          </div>
         </div>
         <div class="card">
           <h3 class="text-2xl font-semibold mb-4">モダンなデザイン</h3>
           <p>最新トレンドのUI/UXを提供。</p>
+          <div class="card-overlay">
+            <p>詳細: ガラス質感とネオンアクセントで未来感を。</p>
+          </div>
         </div>
         <div class="card">
           <h3 class="text-2xl font-semibold mb-4">スケーラブル</h3>
           <p>どんなプロジェクトにも対応。</p>
+          <div class="card-overlay">
+            <p>詳細: 柔軟なグリッドとコンテナクエリで拡張性抜群。</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ギャラリー（カルーセル） -->
-  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080')">
+  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080')" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold text-center mb-12 text-white animate-fadeIn">ギャラリー</h2>
+      <h2 class="text-5xl font-bold text-center mb-12 text-white">ギャラリー</h2>
       <div class="carousel">
         <div class="carousel-item">
           <h3 class="text-xl font-semibold mb-2">プロジェクト1</h3>
@@ -325,9 +459,9 @@
   </section>
 
   <!-- お問い合わせ（モーダル） -->
-  <section id="contact" class="py-20 bg-[var(--primary)] text-white text-center">
+  <section id="contact" class="py-20 bg-[var(--primary)] text-white text-center" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold mb-8 animate-fadeIn">お問い合わせ</h2>
+      <h2 class="text-5xl font-bold mb-8">お問い合わせ</h2>
       <a href="#modal-contact" class="cta-button">今すぐ連絡</a>
     </div>
   </section>
@@ -335,9 +469,9 @@
     <div class="modal-content">
       <h3 class="text-2xl font-bold mb-4">お問い合わせ</h3>
       <form>
-        <input type="text" placeholder="名前" class="w-full p-2 mb-4 rounded">
-        <input type="email" placeholder="メール" class="w-full p-2 mb-4 rounded">
-        <textarea placeholder="メッセージ" class="w-full p-2 mb-4 rounded"></textarea>
+        <input type="text" placeholder="名前" class="form-input">
+        <input type="email" placeholder="メール" class="form-input">
+        <textarea placeholder="メッセージ" class="form-input h-32"></textarea>
         <a href="#" class="cta-button">送信</a>
       </form>
       <a href="#" class="absolute top-4 right-4 text-white">✕</a>
@@ -349,7 +483,10 @@
     <p>© 2025 スーパーリッチサイト. All rights reserved.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
+    AOS.init();
+
     // カスタムカーソル
     const cursor = document.querySelector('.cursor');
     document.addEventListener('mousemove', (e) => {
@@ -360,6 +497,22 @@
     document.querySelectorAll('a, button, .card').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+
+    // プログレスバー
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.querySelector('.progress-bar').style.width = `${scrollPercent}%`;
+    });
+
+    // インタラクティブな背景
+    const heroBg = document.querySelector('.hero-background');
+    document.querySelector('.hero').addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      heroBg.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(0, 255, 170, 0.2) 0%, transparent 70%)`;
     });
   </script>
 </body>
