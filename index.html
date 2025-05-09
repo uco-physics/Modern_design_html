@@ -3,36 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>スーパーリッチなモダンサイト</title>
+  <title>1000億レベルのモダンサイト</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Poppins:wght@300;500;700&family=Manrope:wght@300;500;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;700&family=Outfit:wght@300;500;800&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #4f46e5; /* インディゴ */
-      --accent: #00ffaa; /* ネオンライム */
-      --secondary: #f3f4f6; /* ライトグレー */
+      --accent: #ff0080; /* ネオンピンク */
+      --secondary: #06b6d4; /* シアン */
       --text: #111827; /* ダークグレー */
       --bg: #ffffff; /* ホワイト */
       --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-bg-dark: rgba(0, 0, 0, 0.2);
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       --neon-shadow: 0 0 20px var(--accent);
-      --gradient: linear-gradient(135deg, var(--primary) 0%, #a5b4fc 100%);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #111827;
         --text: #f3f4f6;
-        --glass-bg: rgba(0, 0, 0, 0.2);
-        --secondary: #1f2937;
+        --glass-bg: var(--glass-bg-dark);
       }
     }
 
     @layer base {
       body {
         @apply font-sans bg-[var(--bg)] text-[var(--text)] m-0 p-0 overflow-x-hidden;
-        font-family: 'Inter', 'Poppins', 'Manrope', sans-serif;
+        font-family: 'Sora', 'Outfit', 'Inter', sans-serif;
       }
 
       * {
@@ -47,19 +48,19 @@
 
     .cursor {
       position: fixed;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       border: 2px solid var(--accent);
       border-radius: 50%;
       pointer-events: none;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
       z-index: 9999;
     }
 
     .cursor.hovered {
       transform: scale(1.5);
       border-color: var(--primary);
-      background: rgba(0, 255, 170, 0.2);
+      background: rgba(255, 0, 128, 0.2);
     }
 
     /* ガラス質感 */
@@ -68,16 +69,51 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
+      z-index: -1;
+    }
+
+    /* ホログラフィックエフェクト */
+    .holo {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .holo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 0, 128, 0.2), transparent);
+      transform: rotate(45deg);
+      animation: holoShift 5s infinite;
+    }
+
+    @keyframes holoShift {
+      0% { transform: rotate(45deg) translateX(-50%); }
+      100% { transform: rotate(45deg) translateX(50%); }
     }
 
     /* スティッキーヘッダー */
     .header {
       @apply fixed top-0 left-0 w-full z-50 glass;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
 
     .header.scrolled {
-      transform: translateY(-100%);
+      background: var(--glass-bg-dark);
     }
 
     /* ヒーローセクション */
@@ -117,7 +153,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 170, 0.2) 0%, transparent 70%);
+      background: radial-gradient(circle at 50% 50%, rgba(255, 0, 128, 0.2) 0%, transparent 70%);
       transition: background 0.5s ease;
     }
 
@@ -125,86 +161,21 @@
     .hero-title span {
       display: inline-block;
       opacity: 0;
-      transform: translateY(20px);
-      animation: letterFadeIn 0.5s ease forwards;
+      transform: translateY(30px) rotate(10deg);
+      animation: letterFadeIn 0.6s ease forwards;
     }
 
     @keyframes letterFadeIn {
-      to { opacity: 1; transform: translateY(0); }
+      to { opacity: 1; transform: translateY(0) rotate(0); }
     }
 
     .hero-title span:nth-child(1) { animation-delay: 0.1s; }
     .hero-title span:nth-child(2) { animation-delay: 0.2s; }
     .hero-title span:nth-child(3) { animation-delay: 0.3s; }
-    /* 以下略、文字数に応じて追加 */
-
-    /* 地球儀アニメーション */
-    .globe {
-      position: absolute;
-      bottom: 10%;
-      right: 10%;
-      width: 250px;
-      height: 250px;
-      transform: perspective(1000px) rotateY(0deg);
-      animation: rotateGlobe 30s linear infinite;
-      filter: drop-shadow(0 0 20px var(--accent));
-    }
-
-    .globe:hover {
-      animation-play-state: paused;
-      transform: perspective(1000px) rotateY(10deg) scale(1.2);
-    }
-
-    @keyframes rotateGlobe {
-      0% { transform: perspective(1000px) rotateY(0deg); }
-      100% { transform: perspective(1000px) rotateY(360deg); }
-    }
-
-    .globe svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ハンバーガーメニュー */
-    .nav-toggle {
-      display: none;
-    }
-
-    .nav-menu {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 300px;
-      height: 100%;
-      @apply glass;
-      transition: left 0.3s ease;
-      z-index: 1000;
-    }
-
-    .nav-toggle:checked ~ .nav-menu {
-      left: 0;
-    }
-
-    .nav-menu ul {
-      @apply list-none p-8;
-    }
-
-    .nav-menu li {
-      @apply mb-4;
-    }
-
-    .nav-menu a {
-      @apply text-xl font-semibold text-[var(--text)] hover:text-[var(--accent)];
-      transition: color 0.3s ease, transform 0.3s ease;
-    }
-
-    .nav-menu a:hover {
-      transform: translateX(10px);
-    }
-
-    .hamburger {
-      @apply fixed top-4 right-4 z-50;
-    }
+    .hero-title span:nth-child(4) { animation-delay: 0.4s; }
+    .hero-title span:nth-child(5) { animation-delay: 0.5s; }
+    .hero-title span:nth-child(6) { animation-delay: 0.6s; }
+    .hero-title span:nth-child(7) { animation-delay: 0.7s; }
 
     /* カード */
     .card {
@@ -236,7 +207,7 @@
 
     /* CTAボタン */
     .cta-button {
-      @apply relative inline-block px-8 py-4 text-white bg-[var(--primary)] rounded-full font-semibold;
+      @apply relative inline-block px-8 py-4 text-white bg-[var(--primary)] rounded-full font-semibold holo;
       overflow: hidden;
       transition: all 0.3s ease;
     }
@@ -273,7 +244,12 @@
       flex: 0 0 auto;
       scroll-snap-align: start;
       @apply glass p-6 rounded-xl m-4;
-      width: 300px;
+      width: 320px;
+      transition: transform 0.3s ease;
+    }
+
+    .carousel-item:hover {
+      transform: scale(1.05);
     }
 
     /* モーダル */
@@ -307,11 +283,11 @@
     /* インタラクティブなフォーム */
     .form-input {
       @apply w-full p-3 rounded-lg bg-[var(--secondary)] border border-transparent;
-      transition: border 0.3s ease, transform 0.3s ease;
+      transition: border 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-input:focus {
-      @apply border-[var(--accent)] transform scale-1.02;
+      @apply border-[var(--accent)] transform scale-1.02 shadow-[var(--neon-shadow)];
       outline: none;
     }
 
@@ -332,6 +308,7 @@
       background: var(--accent);
       z-index: 1000;
       transition: width 0.1s ease;
+      box-shadow: var(--neon-shadow);
     }
 
     /* カスタムスクロールバー */
@@ -340,32 +317,98 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: var(--secondary);
+      background: var(--bg);
     }
 
     ::-webkit-scrollbar-thumb {
       background: var(--accent);
       border-radius: 4px;
+      box-shadow: var(--neon-shadow);
     }
 
-    /* アニメーション */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* カスタムローダー */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ダイナミックシャドウ */
+    .dynamic-shadow {
+      filter: drop-shadow(0 0 10px var(--accent));
+      transition: filter 0.3s ease;
+    }
+
+    .dynamic-shadow:hover {
+      filter: drop-shadow(0 0 20px var(--accent));
+    }
+
+    /* コンテキストメニュー */
+    .context-menu {
+      position: fixed;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow);
+      z-index: 9999;
+      display: none;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .context-menu.active {
+      display: block;
+    }
+
+    .context-menu ul {
+      @apply list-none m-0 p-0;
+    }
+
+    .context-menu li {
+      @apply p-2 hover:bg-[var(--accent)] hover:text-white rounded;
     }
   </style>
 </head>
 <body>
+  <!-- カスタムローダー -->
+  <div class="loader">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <lottie-player src="https://assets.lottiefiles.com/packages/lf20_jcikwtow.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+  </div>
+
   <!-- プログレスバー -->
   <div class="progress-bar"></div>
 
   <!-- カスタムカーソル -->
   <div class="cursor"></div>
 
+  <!-- コンテキストメニュー -->
+  <div class="context-menu">
+    <ul>
+      <li>テーマ切り替え</li>
+      <li>ページを共有</li>
+      <li>お気に入りに追加</li>
+    </ul>
+  </div>
+
   <!-- スティッキーヘッダー -->
   <header class="header">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-[var(--accent)]">SuperRich</h1>
+      <h1 class="text-2xl font-extrabold text-[var(--accent)]">HyperModern</h1>
       <label for="nav-toggle" class="hamburger">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -376,12 +419,12 @@
 
   <!-- ハンバーガーメニュー -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
-  <nav class="nav-menu">
+  <nav class="nav-menu glass">
     <ul>
-      <li><a href="#home">ホーム</a></li>
-      <li><a href="#features">特徴</a></li>
-      <li><a href="#gallery">ギャラリー</a></li>
-      <li><a href="#contact">お問い合わせ</a></li>
+      <li><a href="#home" class="dynamic-shadow">ホーム</a></li>
+      <li><a href="#features" class="dynamic-shadow">特徴</a></li>
+      <li><a href="#gallery" class="dynamic-shadow">ギャラリー</a></li>
+      <li><a href="#contact" class="dynamic-shadow">お問い合わせ</a></li>
     </ul>
   </nav>
 
@@ -390,47 +433,41 @@
     <div class="hero-background"></div>
     <div class="text-center" data-aos="fade-up" data-aos-duration="1000">
       <h1 class="hero-title text-5xl md:text-8xl font-extrabold mb-6">
-        <span>未</span><span>来</span><span>を</span><span>切</span><span>り</span><span>開</span><span>く</span>
+        <span>未</span><span>来</span><span>を</span><span>形</span><span>作</span><span>る</span>
       </h1>
-      <p class="text-xl md:text-3xl mb-8 font-light">スーパーリッチな静的サイト体験</p>
-      <a href="#contact" class="cta-button">今すぐ始める</a>
+      <p class="text-xl md:text-3xl mb-8 font-light">1000億レベルの静的サイト体験</p>
+      <a href="#contact" class="cta-button animate__animated animate__pulse animate__infinite">今すぐ始める</a>
     </div>
-    <!-- 地球儀アニメーション -->
-    <div class="globe">
-      <svg viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="1">
-        <circle cx="50" cy="50" r="45" fill="rgba(0, 255, 170, 0.1)"/>
-        <path d="M50 5a45 45 0 0 1 0 90" stroke-dasharray="10 10"/>
-        <path d="M5 50h90" stroke-dasharray="10 10"/>
-        <path d="M20 20c10 20 30 20 40 0" stroke="var(--primary)"/>
-        <path d="M30 70c10-20 30-20 40 0" stroke="var(--primary)"/>
-      </svg>
+    <!-- 3D地球儀 -->
+    <div class="globe" style="position: absolute; bottom: 10%; right: 10%; width: 300px; height: 300px;">
+      <canvas id="globeCanvas"></canvas>
     </div>
   </section>
 
   <!-- 特徴セクション -->
   <section id="features" class="py-20" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold text-center mb-12">私たちの強み</h2>
+      <h2 class="text-5xl font-extrabold text-center mb-12">私たちの強み</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="card">
-          <h3 class="text-2xl font-semibold mb-4">高速パフォーマンス</h3>
+        <div class="card dynamic-shadow">
+          <h3 class="text-2xl font-semibold mb-4">超高速パフォーマンス</h3>
           <p>最適化されたコードで瞬時にロード。</p>
           <div class="card-overlay">
-            <p>詳細: ミニファイされたCSSと遅延ロードで最高速度。</p>
+            <p>詳細: ミニファイCSS、遅延ロード、WebP画像で最高速度。</p>
           </div>
         </div>
-        <div class="card">
-          <h3 class="text-2xl font-semibold mb-4">モダンなデザイン</h3>
-          <p>最新トレンドのUI/UXを提供。</p>
+        <div class="card dynamic-shadow">
+          <h3 class="text-2xl font-semibold mb-4">未来的デザイン</h3>
+          <p>ガラス質感とネオンでトレンドをリード。</p>
           <div class="card-overlay">
-            <p>詳細: ガラス質感とネオンアクセントで未来感を。</p>
+            <p>詳細: Vercel風のUI/UXで視覚的インパクトを。</p>
           </div>
         </div>
-        <div class="card">
-          <h3 class="text-2xl font-semibold mb-4">スケーラブル</h3>
-          <p>どんなプロジェクトにも対応。</p>
+        <div class="card dynamic-shadow">
+          <h3 class="text-2xl font-semibold mb-4">無限スケーラビリティ</h3>
+          <p>どんなプロジェクトにも対応可能。</p>
           <div class="card-overlay">
-            <p>詳細: 柔軟なグリッドとコンテナクエリで拡張性抜群。</p>
+            <p>詳細: コンテナクエリとグリッドで柔軟な拡張。</p>
           </div>
         </div>
       </div>
@@ -438,21 +475,21 @@
   </section>
 
   <!-- ギャラリー（カルーセル） -->
-  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080')" data-aos="fade-up">
+  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080?tech')" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold text-center mb-12 text-white">ギャラリー</h2>
+      <h2 class="text-5xl font-extrabold text-center mb-12 text-white">ギャラリー</h2>
       <div class="carousel">
-        <div class="carousel-item">
+        <div class="carousel-item dynamic-shadow">
           <h3 class="text-xl font-semibold mb-2">プロジェクト1</h3>
-          <p>革新的なデザイン。</p>
+          <p>革新的なデザインと技術。</p>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item dynamic-shadow">
           <h3 class="text-xl font-semibold mb-2">プロジェクト2</h3>
-          <p>未来志向の技術。</p>
+          <p>未来志向のソリューション。</p>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item dynamic-shadow">
           <h3 class="text-xl font-semibold mb-2">プロジェクト3</h3>
-          <p>スケーラブルなソリューション。</p>
+          <p>スケーラブルなアーキテクチャ。</p>
         </div>
       </div>
     </div>
@@ -461,17 +498,17 @@
   <!-- お問い合わせ（モーダル） -->
   <section id="contact" class="py-20 bg-[var(--primary)] text-white text-center" data-aos="fade-up">
     <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-bold mb-8">お問い合わせ</h2>
+      <h2 class="text-5xl font-extrabold mb-8">お問い合わせ</h2>
       <a href="#modal-contact" class="cta-button">今すぐ連絡</a>
     </div>
   </section>
   <div id="modal-contact" class="modal">
     <div class="modal-content">
-      <h3 class="text-2xl font-bold mb-4">お問い合わせ</h3>
+      <h3 class="text-2xl font-extrabold mb-4">お問い合わせ</h3>
       <form>
-        <input type="text" placeholder="名前" class="form-input">
-        <input type="email" placeholder="メール" class="form-input">
-        <textarea placeholder="メッセージ" class="form-input h-32"></textarea>
+        <input type="text" placeholder="名前" class="form-input mb-4">
+        <input type="email" placeholder="メール" class="form-input mb-4">
+        <textarea placeholder="メッセージ" class="form-input h-32 mb-4"></textarea>
         <a href="#" class="cta-button">送信</a>
       </form>
       <a href="#" class="absolute top-4 right-4 text-white">✕</a>
@@ -480,12 +517,23 @@
 
   <!-- フッター -->
   <footer class="py-10 bg-[var(--text)] text-white text-center">
-    <p>© 2025 スーパーリッチサイト. All rights reserved.</p>
+    <p>© 2025 HyperModern. All rights reserved.</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script>
     AOS.init();
+    gsap.registerPlugin(ScrollTrigger);
+
+    // カスタムローダー
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.querySelector('.loader').classList.add('hidden');
+      }, 2000);
+    });
 
     // カスタムカーソル
     const cursor = document.querySelector('.cursor');
@@ -512,7 +560,55 @@
     document.querySelector('.hero').addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
-      heroBg.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(0, 255, 170, 0.2) 0%, transparent 70%)`;
+      heroBg.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255, 0, 128, 0.2) 0%, transparent 70%)`;
+    });
+
+    // 3D地球儀
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 300 / 300, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('globeCanvas'), alpha: true });
+    renderer.setSize(300, 300);
+
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const texture = new THREE.TextureLoader().load('https://source.unsplash.com/random/512x512?earth');
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    camera.position.z = 2;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // スクロールトリガーアニメーション
+    gsap.utils.toArray('.card').forEach(card => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          scrub: true
+        },
+        opacity: 0,
+        y: 50
+      });
+    });
+
+    // コンテキストメニュー
+    const contextMenu = document.querySelector('.context-menu');
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      contextMenu.style.top = `${e.clientY}px`;
+      contextMenu.style.left = `${e.clientX}px`;
+      contextMenu.classList.add('active');
+    });
+
+    document.addEventListener('click', () => {
+      contextMenu.classList.remove('active');
     });
   </script>
 </body>
