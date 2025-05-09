@@ -1,615 +1,256 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1000億レベルのモダンサイト</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;700&family=Outfit:wght@300;500;800&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #4f46e5; /* インディゴ */
-      --accent: #ff0080; /* ネオンピンク */
-      --secondary: #06b6d4; /* シアン */
-      --text: #111827; /* ダークグレー */
-      --bg: #ffffff; /* ホワイト */
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-bg-dark: rgba(0, 0, 0, 0.2);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      --neon-shadow: 0 0 20px var(--accent);
-      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Clone</title>
+    <style>
+        /* Reset and Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1A2634;
+            color: #FFFFFF;
+            line-height: 1.6;
+            padding: 20px;
+        }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111827;
-        --text: #f3f4f6;
-        --glass-bg: var(--glass-bg-dark);
-      }
-    }
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2A3644;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .logo { font-size: 24px; font-weight: bold; }
+        .search-bar {
+            flex: 1;
+            margin: 0 20px;
+            padding: 8px;
+            background: #3A4654;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+        }
+        .btn-login, .btn-signup {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-login { background: #00A3FF; }
+        .btn-signup { background: #3A4654; margin-left: 10px; }
 
-    @layer base {
-      body {
-        @apply font-sans bg-[var(--bg)] text-[var(--text)] m-0 p-0 overflow-x-hidden;
-        font-family: 'Sora', 'Outfit', 'Inter', sans-serif;
-      }
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        nav a {
+            color: #A0AEC0;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+        }
+        nav a:hover { color: #FFFFFF; }
 
-      * {
-        box-sizing: border-box;
-      }
-    }
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .market-card {
+            flex: 2;
+            background: #2A3644;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .market-card h2 { font-size: 24px; margin-bottom: 10px; }
+        .chance {
+            font-size: 32px;
+            color: #FF4D4F;
+            margin-bottom: 10px;
+        }
+        .trade-panel {
+            flex: 1;
+            background: #2A3644;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .trade-panel .btn {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-yes { background: #00C087; }
+        .btn-no { background: #3A4654; }
+        .btn-yes:hover, .btn-no:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .amount { font-size: 24px; margin: 10px 0; }
+        .amount-btns button {
+            padding: 5px 10px;
+            background: #3A4654;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-trade {
+            width: 100%;
+            padding: 10px;
+            background: #00A3FF;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-trade:hover { transform: scale(1.02); }
 
-    /* カスタムカーソル */
-    body {
-      cursor: none;
-    }
+        /* Chart */
+        canvas { width: 100%; height: 200px; }
 
-    .cursor {
-      position: fixed;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      pointer-events: none;
-      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      z-index: 9999;
-    }
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .tabs button {
+            padding: 5px 10px;
+            background: #3A4654;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        .tabs button.active { background: #00A3FF; }
 
-    .cursor.hovered {
-      transform: scale(1.5);
-      border-color: var(--primary);
-      background: rgba(255, 0, 128, 0.2);
-    }
-
-    /* ガラス質感 */
-    .glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: var(--shadow);
-      position: relative;
-    }
-
-    .glass::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
-      z-index: -1;
-    }
-
-    /* ホログラフィックエフェクト */
-    .holo {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .holo::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255, 0, 128, 0.2), transparent);
-      transform: rotate(45deg);
-      animation: holoShift 5s infinite;
-    }
-
-    @keyframes holoShift {
-      0% { transform: rotate(45deg) translateX(-50%); }
-      100% { transform: rotate(45deg) translateX(50%); }
-    }
-
-    /* スティッキーヘッダー */
-    .header {
-      @apply fixed top-0 left-0 w-full z-50 glass;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-
-    .header.scrolled {
-      background: var(--glass-bg-dark);
-    }
-
-    /* ヒーローセクション */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--gradient);
-      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
-      position: relative;
-      overflow: hidden;
-      scroll-snap-align: start;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
-      animation: gradientShift 15s infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { transform: translateX(0); }
-      50% { transform: translateX(100%); }
-      100% { transform: translateX(0); }
-    }
-
-    /* インタラクティブな背景 */
-    .hero-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 0, 128, 0.2) 0%, transparent 70%);
-      transition: background 0.5s ease;
-    }
-
-    /* タイポグラフィアニメーション */
-    .hero-title span {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(30px) rotate(10deg);
-      animation: letterFadeIn 0.6s ease forwards;
-    }
-
-    @keyframes letterFadeIn {
-      to { opacity: 1; transform: translateY(0) rotate(0); }
-    }
-
-    .hero-title span:nth-child(1) { animation-delay: 0.1s; }
-    .hero-title span:nth-child(2) { animation-delay: 0.2s; }
-    .hero-title span:nth-child(3) { animation-delay: 0.3s; }
-    .hero-title span:nth-child(4) { animation-delay: 0.4s; }
-    .hero-title span:nth-child(5) { animation-delay: 0.5s; }
-    .hero-title span:nth-child(6) { animation-delay: 0.6s; }
-    .hero-title span:nth-child(7) { animation-delay: 0.7s; }
-
-    /* カード */
-    .card {
-      @apply glass p-8 rounded-2xl relative overflow-hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform: perspective(1000px) rotateX(0deg);
-    }
-
-    .card:hover {
-      transform: perspective(1000px) rotateX(5deg) translateY(-10px);
-      box-shadow: var(--neon-shadow);
-    }
-
-    .card-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--glass-bg);
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-      @apply p-8;
-    }
-
-    .card:hover .card-overlay {
-      transform: translateY(0);
-    }
-
-    /* CTAボタン */
-    .cta-button {
-      @apply relative inline-block px-8 py-4 text-white bg-[var(--primary)] rounded-full font-semibold holo;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .cta-button::before {
-      content: '';
-      @apply absolute inset-0 bg-[var(--accent)];
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
-
-    .cta-button:hover::before {
-      transform: translateX(0);
-    }
-
-    .cta-button:hover {
-      @apply shadow-[var(--neon-shadow)];
-    }
-
-    /* カルーセル */
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      @apply py-4;
-    }
-
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
-
-    .carousel-item {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-      @apply glass p-6 rounded-xl m-4;
-      width: 320px;
-      transition: transform 0.3s ease;
-    }
-
-    .carousel-item:hover {
-      transform: scale(1.05);
-    }
-
-    /* モーダル */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .modal:target {
-      display: flex;
-      animation: modalFadeIn 0.5s ease;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-content {
-      @apply glass p-8 rounded-2xl max-w-md;
-    }
-
-    /* インタラクティブなフォーム */
-    .form-input {
-      @apply w-full p-3 rounded-lg bg-[var(--secondary)] border border-transparent;
-      transition: border 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-input:focus {
-      @apply border-[var(--accent)] transform scale-1.02 shadow-[var(--neon-shadow)];
-      outline: none;
-    }
-
-    /* パララックス */
-    .parallax {
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: center;
-    }
-
-    /* プログレスバー */
-    .progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 4px;
-      background: var(--accent);
-      z-index: 1000;
-      transition: width 0.1s ease;
-      box-shadow: var(--neon-shadow);
-    }
-
-    /* カスタムスクロールバー */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 4px;
-      box-shadow: var(--neon-shadow);
-    }
-
-    /* カスタムローダー */
-    .loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      opacity: 1;
-      transition: opacity 0.5s ease;
-    }
-
-    .loader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* ダイナミックシャドウ */
-    .dynamic-shadow {
-      filter: drop-shadow(0 0 10px var(--accent));
-      transition: filter 0.3s ease;
-    }
-
-    .dynamic-shadow:hover {
-      filter: drop-shadow(0 0 20px var(--accent));
-    }
-
-    /* コンテキストメニュー */
-    .context-menu {
-      position: fixed;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: var(--shadow);
-      z-index: 9999;
-      display: none;
-      padding: 8px;
-      border-radius: 8px;
-    }
-
-    .context-menu.active {
-      display: block;
-    }
-
-    .context-menu ul {
-      @apply list-none m-0 p-0;
-    }
-
-    .context-menu li {
-      @apply p-2 hover:bg-[var(--accent)] hover:text-white rounded;
-    }
-  </style>
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #A0AEC0;
+        }
+    </style>
 </head>
 <body>
-  <!-- カスタムローダー -->
-  <div class="loader">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <lottie-player src="https://assets.lottiefiles.com/packages/lf20_jcikwtow.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
-  </div>
+    <!-- Header -->
+    <header>
+        <div class="logo">Polymarket</div>
+        <input type="text" class="search-bar" placeholder="Search markets">
+        <button class="btn-login">Log In</button>
+        <button class="btn-signup">Sign Up</button>
+    </header>
 
-  <!-- プログレスバー -->
-  <div class="progress-bar"></div>
+    <!-- Navigation -->
+    <nav>
+        <a href="#">Trending</a>
+        <a href="#">New</a>
+        <a href="#">Politics</a>
+        <a href="#">Sports</a>
+        <a href="#">Crypto</a>
+        <a href="#">Tech</a>
+        <a href="#">Culture</a>
+        <a href="#">World</a>
+        <a href="#">Economy</a>
+        <a href="#">Trump</a>
+        <a href="#">Elections</a>
+        <a href="#">Mentions</a>
+    </nav>
 
-  <!-- カスタムカーソル -->
-  <div class="cursor"></div>
-
-  <!-- コンテキストメニュー -->
-  <div class="context-menu">
-    <ul>
-      <li>テーマ切り替え</li>
-      <li>ページを共有</li>
-      <li>お気に入りに追加</li>
-    </ul>
-  </div>
-
-  <!-- スティッキーヘッダー -->
-  <header class="header">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-extrabold text-[var(--accent)]">HyperModern</h1>
-      <label for="nav-toggle" class="hamburger">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </label>
-    </div>
-  </header>
-
-  <!-- ハンバーガーメニュー -->
-  <input type="checkbox" id="nav-toggle" class="nav-toggle">
-  <nav class="nav-menu glass">
-    <ul>
-      <li><a href="#home" class="dynamic-shadow">ホーム</a></li>
-      <li><a href="#features" class="dynamic-shadow">特徴</a></li>
-      <li><a href="#gallery" class="dynamic-shadow">ギャラリー</a></li>
-      <li><a href="#contact" class="dynamic-shadow">お問い合わせ</a></li>
-    </ul>
-  </nav>
-
-  <!-- ヒーローセクション -->
-  <section id="home" class="hero">
-    <div class="hero-background"></div>
-    <div class="text-center" data-aos="fade-up" data-aos-duration="1000">
-      <h1 class="hero-title text-5xl md:text-8xl font-extrabold mb-6">
-        <span>未</span><span>来</span><span>を</span><span>形</span><span>作</span><span>る</span>
-      </h1>
-      <p class="text-xl md:text-3xl mb-8 font-light">1000億レベルの静的サイト体験</p>
-      <a href="#contact" class="cta-button animate__animated animate__pulse animate__infinite">今すぐ始める</a>
-    </div>
-    <!-- 3D地球儀 -->
-    <div class="globe" style="position: absolute; bottom: 10%; right: 10%; width: 300px; height: 300px;">
-      <canvas id="globeCanvas"></canvas>
-    </div>
-  </section>
-
-  <!-- 特徴セクション -->
-  <section id="features" class="py-20" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-extrabold text-center mb-12">私たちの強み</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="card dynamic-shadow">
-          <h3 class="text-2xl font-semibold mb-4">超高速パフォーマンス</h3>
-          <p>最適化されたコードで瞬時にロード。</p>
-          <div class="card-overlay">
-            <p>詳細: ミニファイCSS、遅延ロード、WebP画像で最高速度。</p>
-          </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Market Card -->
+        <div class="market-card">
+            <h2>US-China trade deal before June?</h2>
+            <div class="chance">24% chance <span style="color: #FF4D4F;">↓ 14%</span></div>
+            <canvas id="chart"></canvas>
+            <div class="tabs">
+                <button>1H</button>
+                <button>6H</button>
+                <button>1D</button>
+                <button>1W</button>
+                <button class="active">1M</button>
+                <button>ALL</button>
+            </div>
         </div>
-        <div class="card dynamic-shadow">
-          <h3 class="text-2xl font-semibold mb-4">未来的デザイン</h3>
-          <p>ガラス質感とネオンでトレンドをリード。</p>
-          <div class="card-overlay">
-            <p>詳細: Vercel風のUI/UXで視覚的インパクトを。</p>
-          </div>
+
+        <!-- Trade Panel -->
+        <div class="trade-panel">
+            <div style="display: flex; justify-content: space-between;">
+                <button class="btn btn-yes">Yes 25¢</button>
+                <button class="btn btn-no">No 78¢</button>
+            </div>
+            <div class="amount">$0</div>
+            <div class="amount-btns">
+                <button onclick="updateAmount(1)">+$1</button>
+                <button onclick="updateAmount(20)">+$20</button>
+                <button onclick="updateAmount(100)">+$100</button>
+                <button onclick="updateAmount(1000)">Max</button>
+            </div>
+            <button class="btn-trade">Login to Trade</button>
+            <p style="font-size: 12px; color: #A0AEC0; text-align: center; margin-top: 10px;">
+                By trading, you agree to the Terms of Use.
+            </p>
         </div>
-        <div class="card dynamic-shadow">
-          <h3 class="text-2xl font-semibold mb-4">無限スケーラビリティ</h3>
-          <p>どんなプロジェクトにも対応可能。</p>
-          <div class="card-overlay">
-            <p>詳細: コンテナクエリとグリッドで柔軟な拡張。</p>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
 
-  <!-- ギャラリー（カルーセル） -->
-  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080?tech')" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-extrabold text-center mb-12 text-white">ギャラリー</h2>
-      <div class="carousel">
-        <div class="carousel-item dynamic-shadow">
-          <h3 class="text-xl font-semibold mb-2">プロジェクト1</h3>
-          <p>革新的なデザインと技術。</p>
-        </div>
-        <div class="carousel-item dynamic-shadow">
-          <h3 class="text-xl font-semibold mb-2">プロジェクト2</h3>
-          <p>未来志向のソリューション。</p>
-        </div>
-        <div class="carousel-item dynamic-shadow">
-          <h3 class="text-xl font-semibold mb-2">プロジェクト3</h3>
-          <p>スケーラブルなアーキテクチャ。</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Footer -->
+    <footer>
+        <p>Order Book • Source: Polymarket.com</p>
+    </footer>
 
-  <!-- お問い合わせ（モーダル） -->
-  <section id="contact" class="py-20 bg-[var(--primary)] text-white text-center" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-      <h2 class="text-5xl font-extrabold mb-8">お問い合わせ</h2>
-      <a href="#modal-contact" class="cta-button">今すぐ連絡</a>
-    </div>
-  </section>
-  <div id="modal-contact" class="modal">
-    <div class="modal-content">
-      <h3 class="text-2xl font-extrabold mb-4">お問い合わせ</h3>
-      <form>
-        <input type="text" placeholder="名前" class="form-input mb-4">
-        <input type="email" placeholder="メール" class="form-input mb-4">
-        <textarea placeholder="メッセージ" class="form-input h-32 mb-4"></textarea>
-        <a href="#" class="cta-button">送信</a>
-      </form>
-      <a href="#" class="absolute top-4 right-4 text-white">✕</a>
-    </div>
-  </div>
+    <!-- Chart.js CDN and Inline Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Chart.js Configuration
+        const ctx = document.getElementById('chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Apr 9', 'Apr 13', 'Apr 17', 'Apr 21', 'Apr 25', 'May 1', 'May 5', 'May 9'],
+                datasets: [{
+                    label: 'Chance',
+                    data: [50, 40, 35, 30, 25, 20, 22, 24],
+                    borderColor: '#00A3FF',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                scales: {
+                    y: { min: 0, max: 100, ticks: { stepSize: 20 } }
+                }
+            }
+        });
 
-  <!-- フッター -->
-  <footer class="py-10 bg-[var(--text)] text-white text-center">
-    <p>© 2025 HyperModern. All rights reserved.</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script>
-    AOS.init();
-    gsap.registerPlugin(ScrollTrigger);
-
-    // カスタムローダー
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.querySelector('.loader').classList.add('hidden');
-      }, 2000);
-    });
-
-    // カスタムカーソル
-    const cursor = document.querySelector('.cursor');
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-    });
-
-    document.querySelectorAll('a, button, .card').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-    });
-
-    // プログレスバー
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      document.querySelector('.progress-bar').style.width = `${scrollPercent}%`;
-    });
-
-    // インタラクティブな背景
-    const heroBg = document.querySelector('.hero-background');
-    document.querySelector('.hero').addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      heroBg.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255, 0, 128, 0.2) 0%, transparent 70%)`;
-    });
-
-    // 3D地球儀
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, 300 / 300, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('globeCanvas'), alpha: true });
-    renderer.setSize(300, 300);
-
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const texture = new THREE.TextureLoader().load('https://source.unsplash.com/random/512x512?earth');
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
-
-    camera.position.z = 2;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      sphere.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // スクロールトリガーアニメーション
-    gsap.utils.toArray('.card').forEach(card => {
-      gsap.from(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          scrub: true
-        },
-        opacity: 0,
-        y: 50
-      });
-    });
-
-    // コンテキストメニュー
-    const contextMenu = document.querySelector('.context-menu');
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      contextMenu.style.top = `${e.clientY}px`;
-      contextMenu.style.left = `${e.clientX}px`;
-      contextMenu.classList.add('active');
-    });
-
-    document.addEventListener('click', () => {
-      contextMenu.classList.remove('active');
-    });
-  </script>
+        // Amount Update Function
+        function updateAmount(value) {
+            const amountEl = document.querySelector('.amount');
+            let current = parseInt(amountEl.textContent.replace('$', '')) || 0;
+            amountEl.textContent = `$${current + value}`;
+        }
+    </script>
 </body>
 </html>
