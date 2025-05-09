@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スーパーリッチなモダンサイト</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #f3f4f6;
+      --accent: #00ffaa;
+      --text: #1f2937;
+      --bg: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      --neon-shadow: 0 0 20px var(--accent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1f2937;
+        --text: #f3f4f6;
+        --glass-bg: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    @layer base {
+      body {
+        @apply font-sans bg-[var(--bg)] text-[var(--text)] m-0 p-0 overflow-x-hidden;
+        font-family: 'Inter', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    }
+
+    /* カスタムカーソル */
+    body {
+      cursor: none;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      z-index: 9999;
+    }
+
+    .cursor.hovered {
+      transform: scale(1.5);
+      border-color: var(--primary);
+    }
+
+    /* ガラス質感 */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow);
+    }
+
+    /* ヒーローセクション */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary) 0%, #a5b4fc 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+      animation: gradientShift 10s infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(100%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* 地球儀アニメーション */
+    .globe {
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      width: 200px;
+      height: 200px;
+      transform: perspective(1000px) rotateY(0deg);
+      animation: rotateGlobe 20s linear infinite;
+    }
+
+    .globe:hover {
+      animation-play-state: paused;
+      transform: scale(1.2);
+    }
+
+    @keyframes rotateGlobe {
+      0% { transform: perspective(1000px) rotateY(0deg); }
+      100% { transform: perspective(1000px) rotateY(360deg); }
+    }
+
+    /* ハンバーガーメニュー */
+    .nav-toggle {
+      display: none;
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 300px;
+      height: 100%;
+      @apply glass;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .nav-toggle:checked ~ .nav-menu {
+      left: 0;
+    }
+
+    .nav-menu ul {
+      @apply list-none p-8;
+    }
+
+    .nav-menu li {
+      @apply mb-4;
+    }
+
+    .nav-menu a {
+      @apply text-xl font-semibold text-[var(--text)] hover:text-[var(--accent)];
+      transition: color 0.3s ease;
+    }
+
+    .hamburger {
+      @apply fixed top-4 right-4 z-50;
+    }
+
+    /* カード */
+    .card {
+      @apply glass p-6 rounded-xl;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform: perspective(1000px) rotateX(0deg);
+    }
+
+    .card:hover {
+      transform: perspective(1000px) rotateX(5deg) translateY(-10px);
+      box-shadow: var(--neon-shadow);
+    }
+
+    /* CTAボタン */
+    .cta-button {
+      @apply relative inline-block px-8 py-4 text-white bg-[var(--primary)] rounded-full font-semibold;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button::before {
+      content: '';
+      @apply absolute inset-0 bg-[var(--accent)];
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover::before {
+      transform: translateX(0);
+    }
+
+    .cta-button:hover {
+      @apply shadow-[var(--neon-shadow)];
+    }
+
+    /* カルーセル */
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-item {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      @apply glass p-6 rounded-xl m-4;
+      width: 300px;
+    }
+
+    /* モーダル */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal:target {
+      display: flex;
+    }
+
+    .modal-content {
+      @apply glass p-8 rounded-xl max-w-md;
+    }
+
+    /* パララックス */
+    .parallax {
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* アニメーション */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- カスタムカーソル -->
+  <div class="cursor"></div>
+
+  <!-- ハンバーガーメニュー -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="hamburger">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </label>
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="#home">ホーム</a></li>
+      <li><a href="#features">特徴</a></li>
+      <li><a href="#gallery">ギャラリー</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+
+  <!-- ヒーローセクション -->
+  <section id="home" class="hero">
+    <div class="text-center animate-fadeIn">
+      <h1 class="text-5xl md:text-8xl font-extrabold mb-6">未来を切り開く</h1>
+      <p class="text-xl md:text-3xl mb-8">スーパーリッチな静的サイト体験</p>
+      <a href="#contact" class="cta-button">今すぐ始める</a>
+    </div>
+    <!-- 地球儀アニメーション -->
+    <div class="globe">
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="2">
+        <circle cx="50" cy="50" r="45"/>
+        <path d="M50 5a45 45 0 0 1 0 90" stroke-dasharray="10 10"/>
+        <path d="M5 50h90" stroke-dasharray="10 10"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 特徴セクション -->
+  <section id="features" class="py-20">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl font-bold text-center mb-12 animate-fadeIn">私たちの強み</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card">
+          <h3 class="text-2xl font-semibold mb-4">高速パフォーマンス</h3>
+          <p>最適化されたコードで瞬時にロード。</p>
+        </div>
+        <div class="card">
+          <h3 class="text-2xl font-semibold mb-4">モダンなデザイン</h3>
+          <p>最新トレンドのUI/UXを提供。</p>
+        </div>
+        <div class="card">
+          <h3 class="text-2xl font-semibold mb-4">スケーラブル</h3>
+          <p>どんなプロジェクトにも対応。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ギャラリー（カルーセル） -->
+  <section id="gallery" class="py-20 parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080')">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl font-bold text-center mb-12 text-white animate-fadeIn">ギャラリー</h2>
+      <div class="carousel">
+        <div class="carousel-item">
+          <h3 class="text-xl font-semibold mb-2">プロジェクト1</h3>
+          <p>革新的なデザイン。</p>
+        </div>
+        <div class="carousel-item">
+          <h3 class="text-xl font-semibold mb-2">プロジェクト2</h3>
+          <p>未来志向の技術。</p>
+        </div>
+        <div class="carousel-item">
+          <h3 class="text-xl font-semibold mb-2">プロジェクト3</h3>
+          <p>スケーラブルなソリューション。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- お問い合わせ（モーダル） -->
+  <section id="contact" class="py-20 bg-[var(--primary)] text-white text-center">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl font-bold mb-8 animate-fadeIn">お問い合わせ</h2>
+      <a href="#modal-contact" class="cta-button">今すぐ連絡</a>
+    </div>
+  </section>
+  <div id="modal-contact" class="modal">
+    <div class="modal-content">
+      <h3 class="text-2xl font-bold mb-4">お問い合わせ</h3>
+      <form>
+        <input type="text" placeholder="名前" class="w-full p-2 mb-4 rounded">
+        <input type="email" placeholder="メール" class="w-full p-2 mb-4 rounded">
+        <textarea placeholder="メッセージ" class="w-full p-2 mb-4 rounded"></textarea>
+        <a href="#" class="cta-button">送信</a>
+      </form>
+      <a href="#" class="absolute top-4 right-4 text-white">✕</a>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer class="py-10 bg-[var(--text)] text-white text-center">
+    <p>© 2025 スーパーリッチサイト. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // カスタムカーソル
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+
+    document.querySelectorAll('a, button, .card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+  </script>
+</body>
+</html>
